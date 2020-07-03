@@ -19,9 +19,9 @@ jobs:
       - run: 
           name: "echo an env var that is part of our project"
           command: |
-            echo $MY_ENV_VAR # this env var must be swt within the project 
+            echo $CIRCLE_BRANCH  
 workflows:
-  # Name the workflow "welcome"
+# Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
