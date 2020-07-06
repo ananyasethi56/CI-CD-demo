@@ -6,32 +6,21 @@ orbs:
   welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 jobs:
-  build:
+  create_infrastructure:
     docker:
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
-      - run: npm i
-      - run: npm run lint
-  test:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: npm i
-      - run: npm run test
-  analyse:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: npm audit      
+      - checkout
+      - run: 
+        command: |
+          aws cloudformation deploy \
+            --template-file template.yml \
+            --stack-name my-stack
+       
 workflows:
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - build
-      - test:
-          requires: 
-           - build
-      - analyse:
-          requires:
-            - test     
+      - create_infrastructure
+   
       
